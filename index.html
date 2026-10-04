@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #dcc5e0;
+    background: #e1cbe4;
     font-size: 14px;
   }
   .square .text { flex: 1; display: flex; align-items: center; justify-content: center; }
@@ -44,6 +44,24 @@
   .square .name { font-size: 12px; font-weight: bold; min-height: 1em; }
   .reward-entry { margin: 16px auto 22px; }
   .reward-entry input { width: min(360px, 80vw); padding: 8px; font-size: 16px; }
+  .board-scroll { max-width: 700px; margin: 0 auto; }
+
+  @media (max-width: 600px) {
+    body { margin: 12px; }
+    h1 { font-size: 1.8rem; }
+    .board-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #board {
+      min-width: 600px;
+      gap: 6px;
+    }
+    .square { padding: 4px; font-size: 12px; }
+    .square input { font-size: 16px; }
+    .square .name { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -56,7 +74,9 @@
   <input id="reward" type="text" placeholder="Example: buying boba as a treat tonight">
 </div>
 
-<div id="board"></div>
+<div class="board-scroll" role="region" aria-label="Bingo board; swipe horizontally on small screens" tabindex="0">
+  <div id="board"></div>
+</div>
 <script>
   const squares = [
     "Speaks more than one language", "Has read the syllabus for the class", "Plays a sport as a hobby", "Has done a hack-a-thon, or similar challenge", "Is an out-of-state student",
