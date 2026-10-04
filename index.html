@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bingo!</title>
+<style>
+  body { font-family: "Gill Sans", sans-serif; text-align: center; margin: 20px; }
+  body > p { max-width: 700px; margin-left: auto; margin-right: auto; }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .square {
+    position: relative;
+    aspect-ratio: 1;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #dcc5e0;
+    font-size: 14px;
+  }
+  .square .text { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .square input { width: 100%; box-sizing: border-box; font-size: 12px; }
+  .square.crossed { background: #d7d7a6; }
+  .square.crossed .text { text-decoration: line-through; color: #888; }
+  .square.crossed::after {
+    content: "✕";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4em;
+    color: rgba(200, 0, 0, 0.6);
+    cursor: pointer;
+  }
+  .square .name { font-size: 12px; font-weight: bold; min-height: 1em; }
+  .reward-entry { margin: 16px auto 22px; }
+  .reward-entry input { width: min(360px, 80vw); padding: 8px; font-size: 16px; }
+</style>
+</head>
+<body>
+<h1>INFO 200 Bingo!</h1>
+<p>Let's break some ice!</p>
+<p>Label each box with the first name(s) of your peer who matches the description. Before writing their name, make sure to ask one 'Why? What? Where? etc.' question to get to know them. Each individual can be used for a max of 2 boxes.</p>
+<p>Gift yourself a reward when you complete the board!</p>
+<div class="reward-entry">
+  <label for="reward">My reward for completing the board:</label><br>
+  <input id="reward" type="text" placeholder="Example: buying boba as a treat tonight">
+</div>
+
+<div id="board"></div>
+<script>
+  const squares = [
+    "Speaks more than one language", "Has read the syllabus for the class", "Plays a sport as a hobby", "Has done a hack-a-thon, or similar challenge", "Is an out-of-state student",
+    "Has already been late to a class this quarter", "Has taken the light rail into or out of campus", "Wants to go into data science", "Has gotten lost looking for a class", "Has a favorite study spot on the Ave",
+    "Was born out of the country", "Cooked themselves dinner last night", "Free Space", "Has a favorite color that isn't green or blue", "Likes cats more than dogs",
+    "Is interested in UX design", "Has a playlist for studying", "Has a favorite board game or video game", "Doesn't really get what 200 is about (you'll see!)", "Is interested in computer science",
+    "Has 2 or more siblings", "Is from Washington", "Prefers the US east coast to the west coast", "Lives on campus", "Is interested in joining a club"
+  ];
+
+  const board = document.getElementById("board");
+
+  squares.forEach(label => {
+    const sq = document.createElement("div");
+    sq.className = "square";
+
+    const text = document.createElement("div");
+    text.className = "text";
+    text.textContent = label;
+
+    const name = document.createElement("div");
+    name.className = "name";
+
+    const input = document.createElement("input");
+    input.placeholder = "Enter name";
+    input.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const value = input.value.trim();
+      name.textContent = value;
+      sq.classList.toggle("crossed", value !== "");
+      input.value = "";
+      if (value) input.blur();
+    });
+
+    sq.addEventListener("click", () => {
+      if (!sq.classList.contains("crossed")) return;
+      sq.classList.remove("crossed");
+      name.textContent = "";
+    });
+
+    sq.append(text, name, input);
+    board.append(sq);
+  });
+</script>
+</body>
+</html>
